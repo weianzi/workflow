@@ -15,5 +15,12 @@ export default new Router({
       name: 'mx',
       component: () => import(/* webpackChunkName: "mx" */ './views/Mx')
     },
+    {
+      path: '/workflow',
+      name: 'workflow',
+      component: () => import(/* webpackChunkName: "workflow" */ './views/Workflow')
+    },
+
+    
   ]
 })
