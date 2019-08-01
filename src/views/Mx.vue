@@ -3,6 +3,33 @@
 </template>
 
 <script>
+import {
+  mxGraph,
+  mxRubberband,
+  mxClient,
+  mxCell,
+  mxGraphModel,
+  mxRectangle,
+  mxUtils,
+  mxUndoManager,
+  mxFastOrganicLayout,
+  mxPoint,
+  mxEvent,
+  mxStencil,
+  mxEdgeStyle,
+  mxCodec,
+  mxEditor,
+  mxKeyHandler,
+  mxForm,
+  mxConstants,
+  mxPerimeter,
+  mxImage,
+  mxConnectionHandler,
+  mxGeometry,
+  mxEventSource,
+  mxToolbar,
+  mxGraphHandler
+} from 'mxgraph/javascript/mxClient'
 
 export default {
   name: 'mx',
@@ -19,16 +46,18 @@ export default {
       // Enables guides
       mxGraphHandler.prototype.guidesEnabled = true
       // Alt disables guides
-    //   mxGuide.prototype.isEnabledForEvent = function(evt) {
-    //     return !mxEvent.isAltDown(evt)
-    //   }
+      //   mxGuide.prototype.isEnabledForEvent = function(evt) {
+      //     return !mxEvent.isAltDown(evt)
+      //   }
       // Enables snapping waypoints to terminals
-     // mxEdgeHandler.prototype.snapToTerminals = true
+      // mxEdgeHandler.prototype.snapToTerminals = true
 
-      this.createEditor('editors/config/workfloweditor.xml')
+      this.createEditor(
+        '/javascript/examples/editors/config/workfloweditor.xml'
+      )
     },
     createEditor(config) {
-        //console.log(config, mxUtils.load)
+      //console.log(config, mxUtils.load)
       var editor = null
 
       var hideSplash = function() {
@@ -51,7 +80,7 @@ export default {
         } else {
           //mxObjectCodec.allowEval = true
           //debugger
-         // const c = require(config)
+          // const c = require(config)
           var node = mxUtils.load(config).getDocumentElement()
           console.log(node)
           editor = new mxEditor(node)

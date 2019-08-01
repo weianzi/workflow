@@ -30,8 +30,10 @@
       } else {
         mxObjectCodec.allowEval = true
         var node = mxUtils.load(config).getDocumentElement()
-        console.log(node)
+        //console.log(node)
         editor = new mxEditor(node)
+        var graph = editor.graph
+
         mxObjectCodec.allowEval = false
 
         // Adds active border for panning inside the container
@@ -63,10 +65,23 @@
 
         // Shows the application
         hideSplash()
+
+        //捕获任务节点的鼠标点击事件
+        graph.addListener(mxEvent.CLICK, function(sender, evt) {
+          var cell = evt.getProperty('cell')
+          var nodeId = cell ? cell.id : null
+          console.log(sender, evt, cell, nodeId)
+          //if (nodeId.length > 0) {
+          //  self.clickCell(self.graphId, nodeId)
+          //}
+        })
+
+        var dialog = document.querySelector('.mxWindow-dialog')
+        var mxWindowTitle = document.querySelector('.mxWindow-dialog .mxWindowTitle')
+        dragBox(mxWindowTitle, dialog)
       }
     } catch (e) {
       hideSplash()
-
       // Shows an error message if the editor cannot start
       mxUtils.alert('Cannot start application: ' + e.message)
       throw e // for debugging
@@ -74,4 +89,48 @@
 
     return editor
   }
+}
+
+
+var dragBox = function(drag, wrap) {
+  function getCss(ele, prop) {
+    return parseInt(window.getComputedStyle(ele)[prop])
+  }
+
+  var initX,
+    initY,
+    dragable = false,
+    wrapLeft = getCss(wrap, 'left'),
+    wrapRight = getCss(wrap, 'top')
+
+  drag.addEventListener(
+    'mousedown',
+    function(e) {
+      dragable = true
+      initX = e.clientX
+      initY = e.clientY
+    },
+    false
+  )
+
+  document.addEventListener('mousemove', function(e) {
+    if (dragable === true) {
+      var nowX = e.clientX,
+        nowY = e.clientY,
+        disX = nowX - initX,
+        disY = nowY - initY
+      wrap.style.left = wrapLeft + disX + 'px'
+      wrap.style.top = wrapRight + disY + 'px'
+    }
+  })
+
+  drag.addEventListener(
+    'mouseup',
+    function(e) {
+      dragable = false
+      wrapLeft = getCss(wrap, 'left')
+      wrapRight = getCss(wrap, 'top')
+    },
+    false
+  )
 }

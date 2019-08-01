@@ -6,8 +6,8 @@
 	<include name="config/editor-commons.xml"/>
 	<add as="onInit">
 		function ()
-		{
-			this.showTasks();
+		{	
+			//this.showTasks();
 		}
 	</add>
 	<Array as="cycleAttributeValues">
@@ -68,8 +68,9 @@
 	</Array>
 	<add as="createTasks"><![CDATA[
 		function (div)
-		{
+		{	
 			var off = 30;
+
 			
 			if (this.graph != null)
 			{

@@ -79,7 +79,6 @@
 		function (div)
 		{
 			var off = 30;
-			
 			if (this.graph != null)
 			{
 				var layer = this.graph.getModel().getRoot().getChildAt(0);
