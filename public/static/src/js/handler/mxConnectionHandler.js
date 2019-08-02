@@ -1703,7 +1703,8 @@ mxConnectionHandler.prototype.addWaypointForEvent = function(me)
 mxConnectionHandler.prototype.checkConstraints = function(c1, c2)
 {
 	return (c1 == null || c2 == null || c1.point == null || c2.point == null ||
-		!c1.point.equals(c2.point) || c1.perimeter != c2.perimeter);
+		!c1.point.equals(c2.point) || c1.dx != c2.dx || c1.dy != c2.dy ||
+		c1.perimeter != c2.perimeter);
 };
 
 /**
@@ -2101,7 +2102,7 @@ mxConnectionHandler.prototype.createTargetVertex = function(evt, source)
 		geo = this.graph.getCellGeometry(source);
 	}
 	
-	var clone = this.graph.cloneCells([source])[0];
+	var clone = this.graph.cloneCell(source);
 	var geo = this.graph.getModel().getGeometry(clone);
 	
 	if (geo != null)

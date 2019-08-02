@@ -3,8 +3,7 @@
 	<ui>
 		<add as="graph" element="graph"
 			style="left:0;right:0;top:0;bottom:0;"/>
-		<add as="status" element="status"
-			style="height:20px;bottom:20px;left:20px;right:20px"/>
+		<add as="status" element="status" style="height:0;bottom:0;left:0;right:0"/>
 		<add as="toolbar" x="10" y="10" width="56" style="padding:5px;padding-top:8px;padding-right:0px;"/>
 	</ui>
 	<mxGraph as="graph">

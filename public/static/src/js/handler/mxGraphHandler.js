@@ -43,6 +43,27 @@ function mxGraphHandler(graph)
 	});
 	
 	this.graph.addListener(mxEvent.ESCAPE, this.escapeHandler);
+	
+	// Updates the preview box for remote changes
+	this.refreshHandler = mxUtils.bind(this, function(sender, evt)
+	{
+		if (this.first != null)
+		{
+			try
+			{
+				this.bounds = this.graph.getView().getBounds(this.cells);
+				this.pBounds = this.getPreviewBounds(this.cells);
+				this.updatePreviewShape();
+			}
+			catch (e)
+			{
+				// Resets the handler if cells have vanished
+				this.reset();
+			}
+		}
+	});
+	
+	this.graph.getModel().addListener(mxEvent.CHANGE, this.refreshHandler);
 };
 
 /**
@@ -143,6 +164,14 @@ mxGraphHandler.prototype.selectEnabled = true;
  * Specifies if cells may be moved out of their parents. Default is true.
  */
 mxGraphHandler.prototype.removeCellsFromParent = true;
+
+/**
+ * Variable: removeEmptyParents
+ * 
+ * If empty parents should be removed from the model after all child cells
+ * have been moved out. Default is true.
+ */
+mxGraphHandler.prototype.removeEmptyParents = false;
 
 /**
  * Variable: connectOnDrop
@@ -334,7 +363,7 @@ mxGraphHandler.prototype.isDelayedSelection = function(cell, me)
  * 
  * Consumes the given mouse event. NOTE: This may be used to enable click
  * events for links in labels on iOS as follows as consuming the initial
- * touchStart disables firing the subsequent click evnent on the link.
+ * touchStart disables firing the subsequent click event on the link.
  * 
  * <code>
  * mxGraphHandler.prototype.consumeMouseEvent = function(evtName, me)
@@ -703,12 +732,13 @@ mxGraphHandler.prototype.mouseMove = function(sender, me)
 				this.shape = this.createPreviewShape(this.bounds);
 			}
 			
+			var clone = graph.isCloneEvent(me.getEvent()) && graph.isCellsCloneable() && this.isCloneEnabled();
 			var gridEnabled = graph.isGridEnabledEvent(me.getEvent());
 			var hideGuide = true;
 			
 			if (this.guide != null && this.useGuidesForEvent(me))
 			{
-				delta = this.guide.move(this.bounds, new mxPoint(dx, dy), gridEnabled);
+				delta = this.guide.move(this.bounds, new mxPoint(dx, dy), gridEnabled, clone);
 				hideGuide = false;
 				dx = delta.x;
 				dy = delta.y;
@@ -751,8 +781,6 @@ mxGraphHandler.prototype.mouseMove = function(sender, me)
 			var target = null;
 			var cell = me.getCell();
 
-			var clone = graph.isCloneEvent(me.getEvent()) && graph.isCellsCloneable() && this.isCloneEnabled();
-			
 			if (graph.isDropEnabled() && this.highlightEnabled)
 			{
 				// Contains a call to getCellAt to find the cell under the mouse
@@ -1002,30 +1030,100 @@ mxGraphHandler.prototype.moveCells = function(cells, dx, dy, clone, target, evt)
 	}
 	
 	// Removes cells from parent
+	var parent = this.graph.getModel().getParent(this.cell);
+	
 	if (target == null && this.isRemoveCellsFromParent() &&
-		this.shouldRemoveCellsFromParent(this.graph.getModel().getParent(this.cell), cells, evt))
+		this.shouldRemoveCellsFromParent(parent, cells, evt))
 	{
 		target = this.graph.getDefaultParent();
 	}
 	
 	// Cloning into locked cells is not allowed
 	clone = clone && !this.graph.isCellLocked(target || this.graph.getDefaultParent());
-	
-	// Passes all selected cells in order to correctly clone or move into
-	// the target cell. The method checks for each cell if its movable.
-	cells = this.graph.moveCells(cells, dx - this.graph.panDx / this.graph.view.scale,
-			dy - this.graph.panDy / this.graph.view.scale, clone, target, evt);
-	
-	if (this.isSelectEnabled() && this.scrollOnMove)
+
+	this.graph.getModel().beginUpdate();
+	try
 	{
-		this.graph.scrollCellToVisible(cells[0]);
-	}
+		var parents = [];
+		
+		// Removes parent if all child cells are removed
+		if (!clone && target != null && this.removeEmptyParents)
+		{
+			// Collects all non-selected parents
+			var dict = new mxDictionary();
 			
+			for (var i = 0; i < cells.length; i++)
+			{
+				dict.put(cells[i], true);
+			}
+			
+			// LATER: Recurse up the cell hierarchy
+			for (var i = 0; i < cells.length; i++)
+			{
+				var par = this.graph.model.getParent(cells[i]);
+
+				if (par != null && !dict.get(par))
+				{
+					dict.put(par, true);
+					parents.push(par);
+				}
+			}
+		}
+		
+		// Passes all selected cells in order to correctly clone or move into
+		// the target cell. The method checks for each cell if its movable.
+		cells = this.graph.moveCells(cells, dx - this.graph.panDx / this.graph.view.scale,
+				dy - this.graph.panDy / this.graph.view.scale, clone, target, evt);
+
+		// Removes parent if all child cells are removed
+		var temp = [];
+		
+		for (var i = 0; i < parents.length; i++)
+		{
+			if (this.shouldRemoveParent(parents[i]))
+			{
+				temp.push(parents[i]);
+			}
+		}
+		
+		this.graph.removeCells(temp, false);
+	}
+	finally
+	{
+		this.graph.getModel().endUpdate();
+	}
+
 	// Selects the new cells if cells have been cloned
 	if (clone)
 	{
 		this.graph.setSelectionCells(cells);
 	}
+
+	if (this.isSelectEnabled() && this.scrollOnMove)
+	{
+		this.graph.scrollCellToVisible(cells[0]);
+	}
+};
+
+/**
+ * Function: moveCells
+ * 
+ * Moves the given cells by the specified amount.
+ */
+mxGraphHandler.prototype.shouldRemoveParent = function(parent)
+{
+	var state = this.graph.view.getState(parent);
+	
+	if (state != null && (this.graph.model.isEdge(state.cell) || this.graph.model.isVertex(state.cell)) &&
+		this.graph.isCellDeletable(state.cell) && this.graph.model.getChildCount(state.cell) == 0)
+	{
+		var stroke = mxUtils.getValue(state.style, mxConstants.STYLE_STROKECOLOR, mxConstants.NONE);
+		var fill = mxUtils.getValue(state.style, mxConstants.STYLE_FILLCOLOR, mxConstants.NONE);
+		
+		return stroke == mxConstants.NONE && fill == mxConstants.NONE;
+	}
+	
+	return false;
 };
 
 /**
@@ -1070,6 +1168,12 @@ mxGraphHandler.prototype.destroy = function()
 	{
 		this.graph.removeListener(this.escapeHandler);
 		this.escapeHandler = null;
+	}
+	
+	if (this.refreshHandler != null)
+	{
+		this.graph.getModel().removeListener(this.refreshHandler);
+		this.refreshHandler = null;
 	}
 	
 	this.destroyShapes();
