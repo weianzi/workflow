@@ -8,17 +8,15 @@
       </tr>
     </table>
     <div id="graph" class="base">
-      <!-- Graph Here -->
     </div>
-    <div id="status" class="base" align="right" style="white-space:nowrap;">
-      <!-- Status Here -->
-    </div>
+    <!-- <div id="status" class="base" align="right" style="white-space:nowrap;">
+    </div> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: 'mxWorkflow',
+  name: 'workflow',
   data () {
     return {
       editor: null
