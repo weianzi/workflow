@@ -2,10 +2,10 @@
 	<include name="static/examples/editors/config/wfeditor-commons.xml"/>
 	<ui>
 		<add as="graph" element="graph"
-			style="left:110px;right:0;top:0;bottom:0;"/>
+			style="left:0;right:0;top:0;bottom:0;"/>
 		<add as="status" element="status"
 			style="height:20px;bottom:20px;left:20px;right:20px"/>
-		<add as="toolbar" x="280" y="80" width="100" style="padding:5px;padding-top:8px;padding-right:0px;"/>
+		<add as="toolbar" x="10" y="10" width="56" style="padding:5px;padding-top:8px;padding-right:0px;"/>
 	</ui>
 	<mxGraph as="graph">
 		<include name="static/examples/editors/config/wfgraph-commons.xml"/>

@@ -7,7 +7,8 @@
 	<add as="onInit">
 		function ()
 		{
-			this.showTasks();
+			//this.showTasks();
+			this.showOutline()
 		}
 	</add>
 	<Array as="cycleAttributeValues">
