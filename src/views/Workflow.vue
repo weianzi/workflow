@@ -91,6 +91,7 @@ export default {
     this.editor = createEditor(
       'static/examples/editors/config/workfloweditor.xml'
     )
+
     this.init()
   },
   beforeDestroy() {
@@ -112,7 +113,7 @@ export default {
       this.editor.graph.addListener(mxEvent.CLICK, (sender, evt) => {
         var cell = evt.getProperty('cell')
         var nodeId = cell ? cell.id : null
-        console.log(sender, evt, cell, nodeId)
+        console.log(cell, nodeId)
         //if (nodeId.length > 0) {
         //  self.clickCell(self.graphId, nodeId)
         //}

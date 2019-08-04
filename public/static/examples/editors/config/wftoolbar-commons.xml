@@ -60,11 +60,12 @@
 	<add as="Fork" template="symbol" style="symbol;image=static/examples/editors/images/symbols/fork.png" icon="static/examples/editors/images/symbols/small_fork.gif"/>
 	<add as="Merge" template="symbol" style="symbol;image=static/examples/editors/images/symbols/merge.png" icon="static/examples/editors/images/symbols/small_merge.gif"/>
 	<add as="Inclusive" template="symbol" style="symbol;image=static/examples/editors/images/symbols/inclusive.png" icon="static/examples/editors/images/symbols/small_inclusive.gif"/>
+	 -->
 	<br/><hr/> 
-	<add as="fit" action="fit" icon="static/examples/editors/images/zoom.gif"/>
+	<!--<add as="fit" action="fit" icon="static/examples/editors/images/zoom.gif"/> -->
 	<add as="zoomIn" action="zoomIn" icon="static/examples/editors/images/zoomin.gif"/>
 	<add as="zoomOut" action="zoomOut" icon="static/examples/editors/images/zoomout.gif"/>
-	<add as="actualSize" action="actualSize" icon="static/examples/editors/images/zoomactual.gif"/>
+	<!-- <add as="actualSize" action="actualSize" icon="static/examples/editors/images/zoomactual.gif"/>
 	<add as="zoom" action="zoom" icon="static/examples/editors/images/zoom.gif"/> -->
 	<br/><hr/>
 	<add as="outline" action="toggleOutline" icon="static/examples/editors/images/outline.gif"/>

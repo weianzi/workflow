@@ -1509,7 +1509,8 @@ mxEditor.prototype.getTemplate = function(name) {
  */
 mxEditor.prototype.createGraph = function() {
   var graph = new mxGraph(null, null, this.graphRenderHint)
-
+  // 允许连线的目标和源是同一元素
+  //graph.setAllowLoops(true)
   // Enables rubberband, tooltips, panning
   graph.setTooltips(true)
   graph.setPanning(true)

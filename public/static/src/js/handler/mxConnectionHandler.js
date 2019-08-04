@@ -547,7 +547,6 @@ mxConnectionHandler.prototype.createMarker = function()
 {
 	var marker = new mxCellMarker(this.graph);
 	marker.hotspotEnabled = true;
-
 	// Overrides to return cell at location only if valid (so that
 	// there is no highlight for invalid cells)
 	marker.getCell = mxUtils.bind(this, function(me)

@@ -808,7 +808,6 @@ mxGraphHandler.prototype.mouseMove = function(sender, me)
 					graph.getModel().isVertex(cell) && graph.isCellConnectable(cell))
 				{
 					state = graph.getView().getState(cell);
-					
 					if (state != null)
 					{
 						var error = graph.getEdgeValidationError(null, this.cell, cell);

@@ -55,6 +55,8 @@
 				
 				editor.graph.allowAutoPanning = true;
 				editor.graph.timerAutoScroll = true;
+				// 允许连线的目标和源是同一元素 
+                editor.graph.setAllowLoops = true; 
 				
 				// Updates the window title after opening new files
 				var title = document.title;
