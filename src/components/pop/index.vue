@@ -20,7 +20,11 @@
               class="mxWindowPane"
               style="width: 100%;"
             >
-              <div>
+              <div
+                v-for="item in cellData"
+                :key="item.name"
+              >
+                {{item.name}}: {{item.value}}
               </div>
             </div>
           </td>
@@ -31,7 +35,24 @@
 </template>
 <script>
 export default {
-  props: ['handleTogglePop'],
+  props: ['handleTogglePop', 'selectedCell'],
+  data() {
+    return {
+      cellData: []
+    }
+  },
+  watch: {
+    selectedCell(obj) {
+      this.cellData = this.handleCellData(obj)
+    }
+    // selectedCell: {
+    //   handler(obj) {
+    //     this.cellData = this.handleCellData(obj)
+    //   },
+    //   deep: true,
+    //   immediate: true
+    // },
+  },
   mounted() {
     var dialog = document.querySelector('.mxWindow-dialog')
     var mxWindowTitle = document.querySelector(
@@ -40,6 +61,18 @@ export default {
     this.dragBox(mxWindowTitle, dialog)
   },
   methods: {
+    handleCellData(cell) {
+      const arr = []
+      if (cell) {
+        const attrs = cell.value.attributes
+        const arr = [{ name: 'id', value: cell.id }]
+        for (let i = 0; i < attrs.length; i++) {
+          arr.push({ name: attrs[i].nodeName, value: attrs[i].nodeValue })
+        }
+        return arr
+      }
+    },
+
     dragBox(drag, wrap) {
       function getCss(ele, prop) {
         return parseInt(getComputedStyle(ele)[prop])
