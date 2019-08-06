@@ -64,15 +64,8 @@ export default {
       this.editor.graph.addListener(mxEvent.CLICK, (sender, evt) => {
         var cell = evt.getProperty('cell')
         var id = cell ? cell.id : null
-        // console.log(cell.value.attributes, id)
+        //console.log(sender)
         if (cell) {
-          // var attrs = cell.value.attributes
-          // const obj = {id}
-          // for (var i = 0; i < attrs.length; i++) {
-          //   obj[attrs[i].nodeName] = attrs[i].nodeValue
-          // }
-           console.log(cell)
-
           this.handleTogglePop(true)
           this.selectedCell = cell
         }
