@@ -1,0 +1,46 @@
+<mxGraphModel>
+  <root>
+    <Workflow label="MyWorkflow" description="" href="" id="0">
+      <mxCell/>
+    </Workflow>
+    <Layer label="Default Layer" id="1">
+      <mxCell parent="0"/>
+    </Layer>
+    <Task label="Task" description="" href="" id="2">
+      <mxCell parent="1" vertex="1">
+        <mxGeometry x="140" y="190" width="72" height="90" as="geometry"/>
+      </mxCell>
+    </Task>
+    <Edge label="" description="" id="3">
+      <mxCell parent="1" source="2" target="2" edge="1">
+        <mxGeometry relative="1" as="geometry"/>
+      </mxCell>
+    </Edge>
+    <Edge label="" description="" id="4">
+      <mxCell style="straightEdge" edge="1" parent="1" source="2" target="5">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint x="160" y="450" as="targetPoint"/>
+          <Array as="points">
+            <mxPoint x="176" y="370"/>
+          </Array>
+        </mxGeometry>
+      </mxCell>
+    </Edge>
+    <Symbol label="Symbol" description="" href="" id="5">
+      <mxCell style="symbol;image=static/examples/editors/images/symbols/event_end.png" vertex="1" parent="1">
+        <mxGeometry x="160" y="460" width="32" height="32" as="geometry"/>
+      </mxCell>
+    </Symbol>
+    <Edge label="" description="" id="6">
+      <mxCell style="straightEdge" edge="1" parent="1">
+        <mxGeometry relative="1" as="geometry">
+          <mxPoint x="192" y="466" as="sourcePoint"/>
+          <mxPoint x="192" y="486" as="targetPoint"/>
+          <Array as="points">
+            <mxPoint x="230" y="476"/>
+          </Array>
+        </mxGeometry>
+      </mxCell>
+    </Edge>
+  </root>
+</mxGraphModel>
