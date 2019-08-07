@@ -1497,7 +1497,7 @@ var EditDataDialog = function(ui, cell)
 			temp.push({name: attrs[i].nodeName, value: attrs[i].nodeValue});
 		}
 	}
-	
+	console.log('temp', temp)
 	// Sorts by name
 	temp.sort(function(a, b)
 	{
