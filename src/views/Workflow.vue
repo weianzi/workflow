@@ -69,32 +69,7 @@ export default {
       const {graph} = this.editor
       //捕获任务节点的鼠标点击事件
       graph.addListener(mxEvent.CLICK, (sender, evt) => {
-        var cell = evt.getProperty('cell')
-
-        var model = graph.getModel()
-        var value = model.getValue(cell)
-        console.log('graph', graph)
-
-        var bounds = graph.getCellBounds(cell)
-        //console.log('bounds', bounds)
-        var parent = cell.parent;
-        var source = cell.getTerminal(true);
-        var target = cell.getTerminal(false);
-        console.log('parent', parent, source, target)
-
-        var getTooltipForCell = graph.getTooltipForCell(cell)
-        //console.log('getTooltipForCell', getTooltipForCell)
-        // if(mxUtils.isNode(value)) {
-        // }
-        //如果是节点
-        // if (model.isVertex(cell)) {
-        //   var geo = model.getGeometry(cell)
-        //   console.log('geo', geo)
-        // } else {
-
-        // }
-
-
+        const cell = evt.getProperty('cell')
         if (cell) {
           this.handleTogglePop(true)
         }

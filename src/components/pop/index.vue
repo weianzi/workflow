@@ -80,9 +80,19 @@ export default {
       const arr = []
       //const obj = {}
       if (cell) {
-        //console.log(1)
-        //cell.setAttribute('姓名', '小刘')
-        cell.setAttribute('age', 28)
+        const model = this.graph.getModel()
+        //height width top left
+        const bounds = this.graph.getCellBounds(cell)
+        const source = cell.getTerminal(true) //from
+        const target = cell.getTerminal(false) //to
+        console.log('from to: ', source && source.id, target && target.id, bounds)
+        //如果是节点
+        if (model.isVertex(cell)) {
+        } else {
+
+        }
+        //cell.setAttribute('age', 28)
+
         const attrs = cell.value.attributes
         const arr = [{ name: 'id', value: cell.id }]
         //obj.id = cell.id
