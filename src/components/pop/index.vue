@@ -11,20 +11,43 @@
       </div>
     </div>
     <div class="mxWindowPane">
-      <div class="mxWindowPane">
-        <div
-          v-for="item in cellData"
-          :key="item.name"
+      <!-- <el-scrollbar>
+        <el-form
+          :model="cellData"
+          class="search-form"
+          :label-position="'left'"
         >
-          {{item.name}}: {{item.value}}
-        </div>
+          <el-form-item>
+            <el-col style="width:2.7rem;">
+              <el-form-item
+                label="年份"
+                :label-width="'0.5rem'"
+              >
+                <el-input v-model="cellData.age" clearable />
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+        </el-form>
+      </el-scrollbar> -->
+      <div
+        v-for="item in cellData"
+        :key="item.name"
+      >
+        {{item.name}}:
+        <input
+          type="text"
+          :value="item.value"
+          @change="handleInputChange($event, item.name)"
+          :disabled="item.name == 'id'"
+        />
       </div>
+
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['handleTogglePop', 'selectedCell'],
+  props: ['graph', 'handleTogglePop', 'selectedCell'],
   data() {
     return {
       cellData: []
@@ -47,18 +70,28 @@ export default {
     this.dragBox(mxWindowTitle, dialog)
   },
   methods: {
+    handleInputChange(ev, name) {
+      const value = ev.target.value
+      console.log(value, name)
+      this.selectedCell.setAttribute(name, value)
+      this.graph.refresh(this.selectedCell) //刷新面板graph，必须写，否则不会看到cell的删除效果
+    },
     handleCellData(cell) {
       const arr = []
+      //const obj = {}
       if (cell) {
-       console.log(1)
-        cell.setAttribute('姓名', 'XXX')
-        cell.setAttribute('年龄', 'XXX')
+        //console.log(1)
+        //cell.setAttribute('姓名', '小刘')
+        cell.setAttribute('age', 28)
         const attrs = cell.value.attributes
         const arr = [{ name: 'id', value: cell.id }]
+        //obj.id = cell.id
         for (let i = 0; i < attrs.length; i++) {
           arr.push({ name: attrs[i].nodeName, value: attrs[i].nodeValue })
+          //obj[attrs[i].nodeName] = attrs[i].nodeValue
         }
         return arr
+        //return obj
       }
     },
 

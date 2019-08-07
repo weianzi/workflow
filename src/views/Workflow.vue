@@ -7,9 +7,10 @@
     <!-- <div id="status" class="base" align="right" style="white-space:nowrap;">
     </div>-->
     <pop
-      v-if="isShowPop"
+      v-if="isShowPop && selectedCell"
       :handleTogglePop="handleTogglePop"
       :selectedCell="selectedCell"
+      :graph="editor.graph"
     />
     <div
       @click="exportXml"
@@ -19,6 +20,11 @@
       @click="readXml"
       class="read-btn"
     >读取xml</div>
+
+    <div
+      @click="delCell"
+      class="del-btn"
+    >删除选中</div>
   </div>
 </template>
 
@@ -32,7 +38,7 @@ export default {
     return {
       isShowPop: false,
       editor: null,
-      selectedCell: null,
+      selectedCell: null
     }
   },
   mounted() {
@@ -60,15 +66,39 @@ export default {
       this.isShowPop = flag
     },
     init() {
+      const {graph} = this.editor
       //捕获任务节点的鼠标点击事件
-      this.editor.graph.addListener(mxEvent.CLICK, (sender, evt) => {
+      graph.addListener(mxEvent.CLICK, (sender, evt) => {
         var cell = evt.getProperty('cell')
-        var id = cell ? cell.id : null
-        //console.log(sender)
+
+        var model = graph.getModel()
+        var value = model.getValue(cell)
+        console.log('graph', graph)
+
+        var bounds = graph.getCellBounds(cell)
+        //console.log('bounds', bounds)
+        var parent = cell.parent;
+        var source = cell.getTerminal(true);
+        var target = cell.getTerminal(false);
+        console.log('parent', parent, source, target)
+
+        var getTooltipForCell = graph.getTooltipForCell(cell)
+        //console.log('getTooltipForCell', getTooltipForCell)
+        // if(mxUtils.isNode(value)) {
+        // }
+        //如果是节点
+        // if (model.isVertex(cell)) {
+        //   var geo = model.getGeometry(cell)
+        //   console.log('geo', geo)
+        // } else {
+
+        // }
+
+
         if (cell) {
           this.handleTogglePop(true)
-          this.selectedCell = cell
         }
+        this.selectedCell = cell
       })
     },
     exportXml() {
@@ -77,7 +107,14 @@ export default {
       //console.log(mxUtils.getPrettyXml(node))
       mxUtils.popup(mxUtils.getPrettyXml(node), true)
     },
-
+    delCell() {
+      if(!this.selectedCell) {
+        return
+      }
+      this.selectedCell.removeFromParent() //删除了此cell
+      this.editor.graph.refresh(this.selectedCell) //刷新面板graph，必须写，否则不会看到cell的删除效果
+      this.selectedCell = null
+    },
     readXml() {
       var req = mxUtils.load('test.xml')
       var root = req.getDocumentElement()
@@ -109,7 +146,7 @@ export default {
   }
 
   .export-btn,
-  .read-btn {
+  .read-btn, .del-btn {
     position: absolute;
     bottom: 10px;
     left: 10px;
@@ -117,6 +154,9 @@ export default {
   }
   .read-btn {
     left: 200px;
+  }
+  .del-btn{
+    left: 400px;
   }
 }
 </style>

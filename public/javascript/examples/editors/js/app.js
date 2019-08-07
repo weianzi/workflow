@@ -65,20 +65,6 @@
 
         // Shows the application
         hideSplash()
-
-        //捕获任务节点的鼠标点击事件
-        // graph.addListener(mxEvent.CLICK, function(sender, evt) {
-        //   var cell = evt.getProperty('cell')
-        //   var nodeId = cell ? cell.id : null
-        //   console.log(sender, evt, cell, nodeId)
-        //   //if (nodeId.length > 0) {
-        //   //  self.clickCell(self.graphId, nodeId)
-        //   //}
-        // })
-
-        // var dialog = document.querySelector('.mxWindow-dialog')
-        // var mxWindowTitle = document.querySelector('.mxWindow-dialog .mxWindowTitle')
-        // dragBox(mxWindowTitle, dialog)
       }
     } catch (e) {
       hideSplash()
