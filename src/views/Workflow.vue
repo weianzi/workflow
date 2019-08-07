@@ -45,14 +45,14 @@ export default {
     this.editor && this.editor.destroy && this.editor.destroy()
     this.editor = null
     const parent = document.querySelector('body')
-    const children = document.querySelectorAll('.mxWindow')
-    try {
-      children.forEach(el => {
-        parent.removeChild(el)
-      })
-    } catch (e) {
-      console.log(e)
-    }
+    // const children = document.querySelectorAll('.mxWindow')
+    // try {
+    //   children.forEach(el => {
+    //     parent.removeChild(el)
+    //   })
+    // } catch (e) {
+    //   console.log(e)
+    // }
   },
   methods: {
     handleTogglePop(flag) {
